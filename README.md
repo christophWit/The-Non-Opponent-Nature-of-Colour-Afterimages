@@ -23,7 +23,7 @@ FUNCTIONS: This folder contains two types of functions.
 
 DATA ORGANISATION
 
-Data involves the following main variables in columns:
+Raw data involves the following main variables in columns:
 
 pp = Participant nr; the participant label can be retrieved from the "pps" table.
 
