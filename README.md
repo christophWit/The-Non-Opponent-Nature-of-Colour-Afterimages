@@ -20,3 +20,27 @@ FUNCTIONS: This folder contains two types of functions.
 (1) Key functions, some of which are also part of the supplementary material. 
 
 (2) Modules, which are large, independent functions that complete and important task their own. They rely on important functions in the subfolder "functions" but contain all other functions as subfunctions. Modules start with the prefix "mod_" in the function name.
+
+DATA ORGANISATION
+
+Data involves the following main variables in columns:
+
+pp = Participant nr; the participant label can be retrieved from the "pps" table.
+
+ss = Experimental session.
+
+bk = Block within the session (if there are several blocks per session, e.g., in Exp1a); note that the blocks of a participant be distributed across several conditions/experiments.
+
+trial = trial number within the block.
+
+col = inducer colour nr; the coordinates of the inducer may be found in the "stimuli" variable.
+
+adaptLuv or inducer = The colour coordinates of the inducer. They provide lightness, hue and chroma in Experiment 1, and lightness, opponent axes (u*, v*), hue and chroma in Experiments 2-3.
+
+pos = refers to the position of the wedge along the ring of comparison colours in Experiment 1; as the position was randomised, it is not relevant for the analyses.
+
+resp and resp_hue = refers to the comparison colour chosen in Experiment1; resp gives the number of the selected comparison, resp_hue the corresponding hue of the selected comparison.
+
+rt = response time in seconds.
+
+adj_Luv = These are the coordinates of the adjusted colour in Experiments 2-3 instead of the responses resp and resp_hue in Experiment 1. Coordinates are provided as for the Inducer: (1) Lightness, (2) u*, (3) u*, (4) hue, and (5) chroma.
