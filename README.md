@@ -1,1 +1,16 @@
 # The-Non-Opponent-Nature-of-Colour-Afterimages
+This repository accompanies the article "The Non-Opponent Nature of Colour Afterimages" (Witzel, 2025, Communications Psychology). This repository focuses on data analyses in Matlab. Data is also available in Excel format in the linked zenodo respository: https://zenodo.org/uploads/13328099. There are three main scripts and 2 datasets. All functions required for the scripts are either embedded in subfunctions or saved in the subfolder functions. You should thus be able to run each of the 3 scripts without further ado. Details on the files: 
+
+DATASETS:
+(1) rawdata.mat = non-aggregated data; it is not completely raw as it has been slightly preprocessed for usability, e.g., participants are relabled according to the lables in the article, data has been assigned to the three experiments and sub-experiments; stimuli have been organised and sorted, etc. This is the data uploaded to the script "aggregate_rawdata", which produces the aggregated data aggdata (see below).
+(2) aggdata.mat = aggregated data; this is the data used by the script "analyses_and_figures;" it is obtained by running "aggregate_rawdata" with the input "rawdata" (see above). All necessary data preprocessing has been with this data so that analyses and figure production can be run smoothly.
+
+SCRIPTS:
+(1) aggregate_rawdata.m = Script that takes "rawdata.mat" as input and produces "aggdata" as output. This script relies on the function in the subfolder "functions."
+(2) analyses_and_figures.m = Script that produces all analyses and figures featuring in the article. Detailed analyses are output in the command window. Figures and tables are saved in the subfolder "output_figures_and_tables." Tables are saved as Excel files, main figures in pdf and png format, supplementary figures in png format. This script relies on the function in the subfolder "functions."
+(3) dkl_proof_checker.m = Independent, hermetic function that illustrates the code for calculating DKL space and the equivalence of the different ways to calculate the isoluminant plane in DKL space (see section on DKL model in the article and supplementary material). It is hermetic as it involves neither input nor output. It is independent as is does not rely on any external functions because all necessary functiosn are integrated as subfunctions. Thus, it can be run without the data and without the subfolder "functions." 
+
+FUNCTIONS:
+This folder contains two types of functions.
+(1) Key functions, some of which are also part of the supplementary material.
+(2) Modules, which are large, independent functions that complete and important task their own. They rely on important functions in the subfolder "functions" but contain all other functions as subfunctions. Modules start with the prefix "mod_" in the function name.
