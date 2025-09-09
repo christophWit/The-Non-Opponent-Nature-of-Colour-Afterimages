@@ -106,3 +106,91 @@ text(0.5,0.5,sprintf('%d deg',round(SIM.Luv_pol(1))),...
 text(0.5,0.5,sprintf('%d deg',round(COMP.Luv_pol(1))),...
     'Units','Normalized','FontSize', DESIGN.fontsize,...
     'HorizontalAlignment','Center','VerticalAlignment','Top');
+
+%% ***************************** SUBFUNCTIONS *****************************
+
+%% coneconversionmatrix
+function M = coneconversionmatrix(msrments, cmf)
+M = [];
+% Conversion matrices towards CIE1931 XYZ taken from:
+% Golz, J., & MacLeod, D. I. A. (2003). Colorimetry for CRT displays. J Opt Soc Am A Opt Image Sci Vis, 20(5), 769-781. 
+
+switch lower(msrments)
+    case {'smithpokorny', 'sp'}
+        % V. C. Smith and J. Pokorny, ‘‘Spectral sensitivity of the
+        % foveal cone photopigments between 400 and 500 nm,’’ Vision
+        % Res. 15, 161–171 (1975).
+        switch lower(cmf)
+            case '1931'
+                M = [0.15282  0.54383 -0.02795;...
+                    -0.15254  0.45524  0.03355;...
+                    -0.00045  0.00145  0.95449];
+                
+            case 'judd'
+                % Smith & Pokorny cone fundamentals
+                % V. C. Smith & J. Pokorny (1975), Vision Res. 15, 161-172.
+                %        X          Y       Z [cw]
+                M = [ 0.15514  0.54312  -0.03286    % L alias R
+                     -0.15514  0.45684   0.03286    % M alias G
+                      0.0      0.0       0.01608];  % S alias B
+        end
+    case 'smj2'
+        % A. Stockman, D. I. A. MacLeod, and N. E. Johnson, ‘‘Spectral
+        % sensitivities of the human cones,’’ J. Opt. Soc. Am. A 10,
+        % 2491–2521 (1993).
+        switch lower(cmf)
+            case '1931'
+                M = [ 0.18772  0.60445 -0.02517;...
+                     -0.14014  0.43056  0.03773;...
+                      0.02017 -0.04189  1.08472];
+        end
+    case 'smj10'
+        % A. Stockman, D. I. A. MacLeod, and N. E. Johnson, ‘‘Spectrallms2X
+        % sensitivities of the human cones,’’ J. Opt. Soc. Am. A 10,
+        % 2491–2521 (1993).
+        switch lower(cmf)
+            case '1931'
+                M = [ 0.14460  0.62421 -0.00429;...
+                     -0.14506  0.42265  0.05084;...
+                      0.03105 -0.06416  1.10923];
+        end
+    case {'stockmansharpe', 'ss2000', 'ss'}
+        % A. Stockman and L. T. Sharpe, ‘‘Spectral sensitivities of the
+        % middle- and long-wavelength sensitive cones derived from
+        % measurements in observers of known genotype,’’ Vision Res.
+        % 40, 1711–1737 (2000).
+        switch lower(cmf)
+            case '1931'
+                % Taken from Golz & MacLeod (2003).
+                M = [ 0.17156  0.52901 -0.02199;...
+                     -0.15955  0.48553  0.04298;...
+                      0.01916 -0.03989  1.03993];
+        end
+    case {'hunt-pointer-estevez', 'hpe', 'rlab'}
+        % https://en.wikipedia.org/wiki/LMS_color_space
+        switch lower(cmf)
+            case '1931'
+                M = [0.38971,   0.68898,   -0.07868;...
+                    -0.22981,   1.18340,    0.04641;... 
+                     0.00000,   0.00000,    1.00000];
+        end
+end
+
+if isempty(M)
+    error('This transformation matrix is not implemented');
+end
+
+%% lms2XYZ
+function XYZ = lms2XYZ(lms, fndmtls, cmf)
+% 2014dec14 * [cw]
+% NOT TESTED YET!!!!!
+
+if nargin < 3
+    cmf = 'judd';
+    if nargin < 2
+        fndmtls = 'smithpokorny';
+    end
+end
+
+M = coneconversionmatrix(fndmtls, cmf);
+XYZ = lms/(M'); %apparently more precise than: XYZ = lms*inv(M')
