@@ -3,6 +3,7 @@ function dkl_proof_checker
 
 close all; clc; 
 
+% To Choose:
 which_circle = 'dkl';
 which_circle = 'luv';
 switch lower(which_circle)
@@ -24,9 +25,8 @@ switch lower(which_circle)
         BG = colourconverter(bg, 'Luv', 2);
 end
 
-dkl0 = COL0.dkl;
-
-sens = 'stockmansharpe'; cmf = '1931';
+% To Choose:
+%sens = 'stockmansharpe'; cmf = '1931';
 sens = 'smithpokorny'; cmf = '1931';
 COL0.lms    = XYZ2lms(COL0.XYZ, sens, cmf);
 BG.lms      = XYZ2lms(BG.XYZ, sens, cmf);
@@ -34,26 +34,21 @@ BG.lms      = XYZ2lms(BG.XYZ, sens, cmf);
 MON.xyY = srgb;
 MON.XYZ = xyY2XYZ(MON.xyY);
 MON.lms = XYZ2lms(MON.XYZ, sens, cmf);
-%MON = colourconverter([255 0 0; 0 255 0; 0 0 255],'rgb');
 
 
 GAM.XYZ = iso_gamuter(BG.xyY(1,3), MON.xyY);
-%GAM = colourconverter(GAM.XYZ,('XYZ'));
 GAM.lms  = XYZ2lms(GAM.XYZ, sens, cmf);
 
 
 COL0.cc = lms2cc(COL0.lms, BG.lms);
-%dkl_cc = cc2dkl(COL0.cc, BG.lms);
-dkl_cc0 = cc2dkl(COL0.cc);
 dkl_cc = cc2dkl_iso(COL0.cc);
 
-%%
+%% DKL
 dkl         = lms2dkl(COL0.lms, BG.lms);
 dkl_g       = lms2dkl(COL0.lms, BG.lms, MON.lms);
 
 GAM.dkl0    = lms2dkl(GAM.lms, BG.lms);
 GAM.dkl_g   = lms2dkl(GAM.lms, BG.lms, MON.lms);
-%GAM.dkl_g     = lms2dkl_cw(GAM.lms, BG.lms, MON.lms);
 
 BG.dkl  = lms2dkl(BG.lms, BG.lms);
 
@@ -89,7 +84,6 @@ inds = convhull(GAM.dkl_g(:,2),GAM.dkl_g(:,3)); plot(GAM.dkl_g(inds,2),GAM.dkl_g
 scatter(dkl_g(:,2),dkl_g(:,3),30,COL0.rgb/255, 'o', 'filled', 'MarkerEdgeColor', 'k');
 scatter(ADAPTED.dkl_g(:,2),ADAPTED.dkl_g(:,3),30,COL0.rgb/255, 'o', 'filled', 'MarkerEdgeColor', 'k');
 plot(BG.dkl(:,2),BG.dkl(:,3),'k+');
-%plot(dkl0(:,2),dkl0(:,3),'k.');
 hold off
 xlabel('L-M');
 ylabel('S-(L+M)');
