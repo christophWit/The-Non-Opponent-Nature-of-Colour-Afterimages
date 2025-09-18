@@ -1,4 +1,14 @@
+% ANALYSES & FIGURES 
+% This script produces the analyses and figures in the manuscript. If you
+% run the script, it will stop after loading the data (this section) to
+% avoid running through all analyses in one go. To run single analyses,
+% load the data, and then go to the respective section and run the section
+% only (by pressing ctrl + return). If you do want to run the whole script
+% in one go, simply delete "return" at the end of the section and make
+% yourself a tea because it will take a while :).  
+
 clearvars; close all; clc;
+
 % FILES -------------------------------------------------------------------
 src_path = [pwd, '\'];
 functions_folder = [src_path, 'functions'];
@@ -114,9 +124,7 @@ fig_saver(save_folder, 'fig2i-l_afteri', [27 5], saveformat, punits, 300);
 
 %% METHOD
 METH2a = mod_exp2_analysor(AGG2a, 'Method');
-%METH2b = mod_exp2_analysor(AGG2b, 'Method');
-
-%%
+METH2b = mod_exp2_analysor(AGG2b, 'Method');
 
 %% TABLE 2: Correlations in Experiment 2
 
