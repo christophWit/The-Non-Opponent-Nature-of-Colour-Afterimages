@@ -575,6 +575,70 @@ elseif dm == 3
   %
 end
 
+%% cdissolver
+function outM = cdissolver(inM, onecycle)
+% 2024.07.14 [cw]
+
+if nargin < 2
+    onecycle = 360;
+end
+
+%inM = mod(inM, onecycle);
+for cl = 1:size(inM,2)
+    refM1 = ones(size(inM,1),1) * min(inM(:,cl));
+    refM2 = ones(size(inM,1),1) * nanmedian(inM(:,cl));
+    dffM1 = circularsubtractor(inM(:,cl), refM1, onecycle, 'signed');
+    dffM2 = circularsubtractor(inM(:,cl), refM2, onecycle, 'signed');
+    if nanmean(abs(dffM2)) < nanmean(abs(dffM1))
+        refM = refM2; dffM = dffM2;
+    else
+        refM = refM1; dffM = dffM1;
+    end
+%    refM = refM2; dffM = dffM2;
+    outM(:,cl) = refM+dffM;
+end
+
+%% circularsubtractor
+function Difference = circularsubtractor(Minuend, Subtrahend, ONECYCLE, dtype)
+% 2012aug23-24 [cw]
+        
+if nargin < 4
+    dtype = 'regular';
+    if nargin < 3
+        ONECYCLE = 360;
+    end
+end
+
+% map angles to 0:oncecycle:
+Minuend     = mod(Minuend, ONECYCLE);
+Subtrahend  = mod(Subtrahend, ONECYCLE);
+
+% Calculate difference(s):
+regular     = mod(Minuend - Subtrahend, ONECYCLE);
+clockwise   = mod(Subtrahend - Minuend, ONECYCLE);
+
+switch lower(dtype)
+    case 'regular' % Regular difference (counterclockwise)
+        Difference = mod(regular, ONECYCLE);
+    case 'signed'
+        Difference = NaN(size(Minuend,1), size(Minuend,2));
+        inverse = -clockwise;
+        inds = regular <= clockwise; % find the closed
+        Difference(inds) = regular(inds);
+        Difference(~inds) = inverse(~inds);        
+    case 'clockwise' % Clockwise difference (inverse)
+        Difference = mod(clockwise, ONECYCLE);
+    case {'mindist', 'maxdist'} % Minimal distance
+        regular = mod(regular, ONECYCLE);
+        clockwise = mod(clockwise, ONECYCLE);
+        switch lower(dtype)
+            case 'mindist' % Minimal distance
+                Difference = min(abs(regular),abs(clockwise));
+            case 'maxdist' % Maximal distance
+                Difference = max(abs(regular),abs(clockwise));
+        end
+end
+
 %% colourcircler
 function colourcircler(space, lum, rad, azi, markersize, rad_scale_to, varargin)
 % 2020.06.04 based on colorcircler, but added rescaling input "rad_scale_to".
