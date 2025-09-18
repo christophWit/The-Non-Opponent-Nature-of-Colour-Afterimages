@@ -467,6 +467,29 @@ end
 % AXIS:
 plot([-1 1; 0 0]'*mx, [0 0; -1 1]'*mx, linestyle, 'Color', rgb, 'LineWidth', linewidth);
 
+%% circle
+function c = circle(radius, imradius)
+% 2015.07.03
+
+if nargin < 2
+  imradius = radius;
+end
+
+x = (-imradius: imradius);
+y = x;
+[X, Y] = meshgrid(x, y);
+
+z = sqrt(X.^2 + Y.^2);
+
+s = sqrt(2*imradius^2);
+% c = 1 - double(im2bw(z/s, radius/s));
+
+% To avoid image processing toolbox
+c = z/s;
+inds = c <= radius/s;
+c(inds) = 1; 
+c(~inds) = 0;
+
 %% colourcircler
 function colourcircler(space, lum, rad, azi, markersize, rad_scale_to, varargin)
 % 2020.06.04 based on colorcircler, but added rescaling input "rad_scale_to".
