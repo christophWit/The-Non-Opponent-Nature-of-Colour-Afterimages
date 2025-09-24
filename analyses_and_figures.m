@@ -1,11 +1,12 @@
 % ANALYSES & FIGURES 
-% This script produces the analyses and figures in the manuscript. If you
-% run the script, it will stop after loading the data (this section) to
-% avoid running through all analyses in one go. To run single analyses,
+% This script produces the analyses and figures in the manuscript. When you
+% run the whole script, it will stop after loading the data (this section)
+% to avoid running through all analyses in one go. To run single analyses,
 % load the data, and then go to the respective section and run the section
 % only (by pressing ctrl + return). If you do want to run the whole script
 % in one go, simply delete "return" at the end of the section and make
-% yourself a tea because it will take a while :).  
+% yourself a tea because it will take a while :). 
+% 2025.09.23 [cw]
 
 clearvars; close all; clc;
 
