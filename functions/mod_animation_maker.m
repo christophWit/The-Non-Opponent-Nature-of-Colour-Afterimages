@@ -15,7 +15,11 @@ end
 DESIGN.fontsize = 8;
 L = 70;
 gif_file = sprintf('%s.gif', filename_stem);
-png_file = sprintf('%s.png', filename_stem);
+%avi_file = sprintf('%s.avi', filename_stem); % MP4 and AVI change colours
+
+% v = VideoWriter(avi_file, 'Uncompressed AVI');  % output filename and format
+% v.FrameRate = 20;       % frames per second (adjust as you like)
+% open(v);
 
 
 INDU = colourconverter([L iAzi iChroma], 'Luv_pol',2);
@@ -80,6 +84,11 @@ for im = 1:im_n
     
     % Capture the plot as an image
     frame = getframe(fg);
+
+    % % UNCOMPRESSED AVI
+    % writeVideo(v, frame);
+
+    % GIF:
     IM = frame2im(frame);
     [imind,cm] = rgb2ind(IM,65536);
     

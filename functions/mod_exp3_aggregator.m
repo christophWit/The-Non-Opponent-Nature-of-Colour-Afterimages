@@ -356,10 +356,6 @@ lms = [...
     bg_lms(1) bg_lms(2) k*bg_lms(3)];
 
 % CONVERT TO OTHER COLOURS SPACES -----------------------------------------
-% XYZ = lms2XYZ(lms, stimuli.sens, stimuli.cmf);
-% CONES = colourconverter(XYZ, 'XYZ', 2, wp,...
-%     stimuli.mon.xyY, stimuli.mon.ldt, stimuli.mon.oog, [], stimuli.mon.rgb_max, 1, 0);
-% [CONES.dkl, CONES.dkl_pol, CONES.lms] = XYZ2dkl(XYZ, bg_lms, stimuli.sens, stimuli.cmf, stimuli.mon.lms);
 CONES = colourconverter(lms, 'lms', 2,...
     wp, stimuli.sens, stimuli.cmf,...
     stimuli.mon.xyY, stimuli.mon.ldt, stimuli.mon.oog, [], stimuli.mon.rgb_max,...
@@ -877,30 +873,6 @@ maxS2 = (0-rgb0)./(pole_drgb(4,:)); % -S direction
 maxLM = min(abs([maxL,maxM]));
 maxS = min(abs([maxS1,maxS2]));
 
-%% Luv2XYZ
-function [X,Y,Z] = Luv2XYZ(L, u, v, Xn, Yn, Zn)
-% 2012jan20 adapted it for matrices (added '.' for operators) [cw]
-% 2012may21 corrected formula for L*<=8 [cw]
-% 2012sep17 corrected error: added L* condition. [cw]
-% 2015jun05 corrected NaN for L*=0 [cw]
-
-Y = (((L+16)/116).^3).*Yn;  % formula when L* <= 8
-Y2 = L*(3/29)^3.*Yn;        % formula when L* > 8
-inds = L <= 8;
-Y(inds) = Y2(inds);
-
-ustr_n = (4*Xn)./(Xn+15*Yn+3*Zn);
-vstr_n = (9*Yn)./(Xn+15*Yn+3*Zn);
-
-ustrich = (u./(13*L))+ustr_n;
-vstrich = (v./(13*L))+vstr_n;
-
-X = (Y*9).*ustrich./(4*vstrich);
-Z = Y.*((12-3*ustrich-20*vstrich)./(4*vstrich));
-
-inds = L == 0;
-X(inds) = 0; Z(inds) = 0;
-
 %% ste
 function y = ste(varargin)
 % Computes Standard error of mean.
@@ -932,21 +904,6 @@ if dim == 2
 elseif dim == 3
     XYZ = cat(3, X, Y, Z);    
 end
-
-%% XYZ2dkl
-function [dkl, dkl_pol, lms] = XYZ2dkl(XYZ, bg_lms, sens, cmf, mon_lms)
-% 2025.07.31 [cw]
-
-% LMS ---------------------------------------------------------------------
-lms = XYZ2lms(XYZ, sens, cmf);
-
-% DKL ---------------------------------------------------------------------
-dkl = lms2dkl(lms, bg_lms, mon_lms);
-
-% POLAR DKL ---------------------------------------------------------------
-[dkl_azi, dkl_rad] = cart2pol(dkl(:,2),dkl(:,3));
-dkl_azi = rad2deg(dkl_azi);
-dkl_pol = [dkl_azi(:), dkl_rad(:)];
 
 %% XYZ2lms
 function [lms, M] = XYZ2lms(XYZ, fndmtls, cmf)

@@ -254,6 +254,7 @@ end
 %% boundary_aggregator
 function [new_low, new_up] = boundary_aggregator(bound_low0, bound_up0)
 %2020.05.27 [cw]
+%2025.09.24 polished for publication [cw]
 
 % DELETE COMPLETELY MISSING DATA FOR PROCESSING (ADD LATER) ---------------
 pp_n0 = size(bound_low0,1);
@@ -266,8 +267,6 @@ pp_n = size(bound_low,1);
 % DETERMINE ORDER OF BOUNDARIES BASED ON AVERAGE BOUNDARIES ---------------
 Mctg_low = cstats(bound_low)';
 Mctg_up = cstats(bound_up)';
-% [~, sort_inds_low] = sortrows(Mctg_low);
-% [~, sort_inds_up] = sortrows(Mctg_up);
 
 Mctg = cstats([Mctg_low,Mctg_up]')';
 [~, sort_inds] = sortrows(Mctg);
@@ -275,8 +274,6 @@ Mctg = cstats([Mctg_low,Mctg_up]')';
 % REPLACE NAN BY ZERO WIDTH CATEGORIES ------------------------------------
 
 % Sort according to averages:
-% sorted_low  = bound_low(:,sort_inds_low);
-% sorted_up   = bound_up(:,sort_inds_up);
 sorted_low  = bound_low(:,sort_inds);
 sorted_up   = bound_up(:,sort_inds);
 
@@ -295,11 +292,8 @@ sorted_up2 = [sorted_up(:,end),sorted_up]; % FOR LOW!
 % Replace NaNs by adjacent non-nans:
 sorted_low(nan_low) = sorted_low2(nan_low2);
 sorted_up(nan_up) = sorted_up2(nan_up2);
-%sorted_up(nan_up) = sorted_low2(nan_low2);
 
 % UNSORT (Restablish original order) --------------------------------------
-% [~, unsort_inds_low] =sortrows(sort_inds_low);
-% [~, unsort_inds_up] =sortrows(sort_inds_up);
 [~, unsort_inds] =sortrows(sort_inds);
 
 % new_low0 = sorted_low(:,unsort_inds_low);
@@ -368,14 +362,11 @@ bounds(inds1,:,:) = bounds0(inds2,:,:);
 CNagg.bounds = bounds;
 
 % Compensate for missing boundaries to avoid distortion of consensus boundaries:
-%bounds0(:,8,:) = NaN; % trash brown
 [new_low, new_up] = boundary_aggregator(bounds0(:,:,1),bounds0(:,:,2));
 [Mbound_low(1,:),Mbound_low(2,:)] = cstats(new_low, {'nanmean','ste'});
 [Mbound_up(1,:),Mbound_up(2,:)] = cstats(new_up, {'nanmean','ste'});
 
 % DELETE IF AGGREAGED BORDERS ARE NONESENSE (BROWN):
-% Mbound_up(:,8) = NaN;
-% Mbound_low(:,8) = NaN;
 CNagg.Mbound = cat(3,Mbound_low', Mbound_up');
 
 %% hue_frequency_calculator
@@ -888,6 +879,31 @@ for cl = 1:cl_n
     else
         tab  = [tab;tab1];
     end
+end
+
+%% xyY2XYZ
+function XYZ = xyY2XYZ(xyY, dim)
+%input: x, y, Y values in a row vector or matrix )
+% 2012.01.20 [cw]
+
+if nargin < 2
+    dim = 2;
+end
+
+if dim == 2
+    x = xyY(:,1); y = xyY(:,2); Y = xyY(:,3);
+elseif dim == 3
+    x = xyY(:,:,1); y = xyY(:,:,2); Y = xyY(:,:,3); 
+end
+
+X = (Y./y) .* x;
+Y = Y;
+Z = (Y./y) .* (1-y-x);
+
+if dim == 2
+    XYZ = [X Y Z];
+elseif dim == 3
+    XYZ = cat(3, X, Y, Z);    
 end
 
 %% XYZ2lms

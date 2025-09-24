@@ -333,8 +333,6 @@ CONES = colourconverter(XYZ, 'XYZ', 2,...
     stimuli.mon.xyY, stimuli.mon.ldt, stimuli.mon.oog, [], stimuli.mon.rgb_max,...
     stimuli.bg.xyY(3), 0);
 
-%[CONES.dkl, CONES.dkl_pol, CONES.lms] = XYZ2dkl(XYZ, bg_lms, stimuli.sens, stimuli.cmf, stimuli.mon.lms);
-
 %% stimulus_polisher
 function agg_stimuli = stimulus_polisher(exp_stimuli)
 % 2025.07.16 [cw]
@@ -605,20 +603,30 @@ for vr = 1:numel(vrnms)
     T0.(vrnms{vr}) = [T0.(vrnms{vr}), Tnew.(vrnms{vr})];
 end
 
-%% XYZ2dkl
-function [dkl, dkl_pol, lms] = XYZ2dkl(XYZ, bg_lms, sens, cmf, mon_lms)
-% 2025.07.31 [cw]
+%% xyY2XYZ
+function XYZ = xyY2XYZ(xyY, dim)
+%input: x, y, Y values in a row vector or matrix )
+% 2012.01.20 [cw]
 
-% LMS ---------------------------------------------------------------------
-lms = XYZ2lms(XYZ, sens, cmf);
+if nargin < 2
+    dim = 2;
+end
 
-% DKL ---------------------------------------------------------------------
-dkl = lms2dkl(lms, bg_lms, mon_lms);
+if dim == 2
+    x = xyY(:,1); y = xyY(:,2); Y = xyY(:,3);
+elseif dim == 3
+    x = xyY(:,:,1); y = xyY(:,:,2); Y = xyY(:,:,3); 
+end
 
-% POLAR DKL ---------------------------------------------------------------
-[dkl_azi, dkl_rad] = cart2pol(dkl(:,2),dkl(:,3));
-dkl_azi = rad2deg(dkl_azi);
-dkl_pol = [dkl_azi(:), dkl_rad(:)];
+X = (Y./y) .* x;
+Y = Y;
+Z = (Y./y) .* (1-y-x);
+
+if dim == 2
+    XYZ = [X Y Z];
+elseif dim == 3
+    XYZ = cat(3, X, Y, Z);    
+end
 
 %% XYZ2lms
 function [lms, M] = XYZ2lms(XYZ, fndmtls, cmf)
