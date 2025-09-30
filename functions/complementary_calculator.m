@@ -1208,6 +1208,31 @@ M = C .* F_L^0.25;
 s = 100 * sqrt(M ./ Q);
 out = table(J,Q,C,M,s,h,H);
 
+%% xyY2XYZ
+function XYZ = xyY2XYZ(xyY, dim)
+%input: x, y, Y values in a row vector or matrix )
+% 2012.01.20 [cw]
+
+if nargin < 2
+    dim = 2;
+end
+
+if dim == 2
+    x = xyY(:,1); y = xyY(:,2); Y = xyY(:,3);
+elseif dim == 3
+    x = xyY(:,:,1); y = xyY(:,:,2); Y = xyY(:,:,3); 
+end
+
+X = (Y./y) .* x;
+Y = Y;
+Z = (Y./y) .* (1-y-x);
+
+if dim == 2
+    XYZ = [X Y Z];
+elseif dim == 3
+    XYZ = cat(3, X, Y, Z);    
+end
+
 %% XYZ2dkl
 function [dkl, dkl_pol, lms] = XYZ2dkl(XYZ, bg_lms, sens, cmf, mon_lms)
 % 2025.07.31 [cw]

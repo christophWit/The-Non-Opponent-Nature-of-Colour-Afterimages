@@ -4,6 +4,7 @@ function figfile = fig_saver(folder, flnm, sz, saveformat, punits, res, printmod
 % 2019.08.10 added svg, tif and pdf format [cw]
 % 2021.01.06 added jpg format [cw]
 % 2023.06.02 added output figfile 
+% 2025.09.30 use fullfile to create paths for Apple/Win compatibility [cw] 
 
 if nargin < 7
     printmode = '-painters';
@@ -21,7 +22,7 @@ end
 res = sprintf('-r%d', res);
 
 set(gcf, 'PaperUnits', punits, 'PaperPosition', [0, 0, sz(1), sz(2)], 'PaperSize', sz);
-figfile0 = [folder, '\', flnm];
+figfile0 = fullfile(folder, flnm);
 
 switch lower(saveformat)
     case {'all', 'png'}

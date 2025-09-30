@@ -448,7 +448,7 @@ if ~isempty(INPUTARGUMENTS_FROM_VARARGIN)
         if rem(size(INPUTARGUMENTS_FROM_VARARGIN),2)~=0
             error('INPUT ERROR: Input arguments are not even! Did you forget to specify the name/value of the input?');
         else
-            for fld = 1:size(input_keywords)
+            for fld = 1:numel(input_keywords)
                 inds = find(strcmpi(input_keywords{fld},INPUTARGUMENTS_FROM_VARARGIN));
                 if ~isempty(inds)
                     SETTINGS.(INPUTARGUMENTS_FROM_VARARGIN{inds})=INPUTARGUMENTS_FROM_VARARGIN{inds+1};
