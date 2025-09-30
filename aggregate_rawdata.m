@@ -4,10 +4,10 @@ clearvars; close all; clc;
 
 % FILES -------------------------------------------------------------------
 save_folder = pwd;
-load([save_folder, '\rawdata.mat']); % Loads raw data;
+load(fullfile(save_folder, 'rawdata.mat')); % Loads raw data;
 
 % Add folder with modules & functions (which do the main job):
-functions_folder = [save_folder, '\functions'];
+functions_folder = fullfile(save_folder, 'functions');
 addpath(functions_folder);
 
 % SEED FOR RANDOMISATION --------------------------------------------------
@@ -40,5 +40,5 @@ RAW.exp2b   = EXP2b;
 RAW.exp3    = EXP3;
 
 %% SAVE PREPARED VARIABLES
-save([save_folder, '\aggdata'],...
+save(fullfile(save_folder, 'aggdata'),...
     'AGG1a', 'AGG1b', 'AGG2a', 'AGG2b', 'AGG3', 'RAW', 'COLOURNAMING', 'MunChips');

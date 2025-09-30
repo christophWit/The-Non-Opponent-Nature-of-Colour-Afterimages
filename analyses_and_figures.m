@@ -12,17 +12,18 @@ clearvars; close all; clc;
 
 % FILES -------------------------------------------------------------------
 src_path = [pwd, '\'];
-functions_folder = [src_path, 'functions'];
+functions_folder = fullfile(src_path, 'functions');
 addpath(functions_folder);
-load([src_path, 'aggdata.mat']);
+load(fullfile(src_path, 'aggdata.mat'));
 
 % SETTINGS FOR OUTPUT ----------------------------------------------------- 
-save_folder = [src_path, 'output_figures_and_tables\'];
-tab_file = [save_folder, 'Tables.xlsx'];
-ani_file = [save_folder, 'animation'];
+save_folder = fullfile(src_path, 'output_figures_and_tables');
+tab_file = fullfile(save_folder, 'Tables.xlsx');
+ani_file = fullfile(save_folder, 'animation');
 fsz = 9; fsz2 = 10;
 punits = 'centimeters';
-saveformat      = 'all';
+%saveformat      = 'all'; % To get pdf, but some take long.
+saveformat      = 'png';
 saveformat_sup  = 'png';
 return
 
@@ -285,7 +286,7 @@ set(axs(2), 'Position', [x(2) y wd, ht]);
 panel_identifier(1, 2, [.15 .1], 0, fsz2, 'rows', axs, '.)');
 
 % SAVE --------------------------------------------------------------------
-fig_saver(save_folder, 'figS12 Afterimage_Matches_&_Control_Task', [20 10], saveformat_sup, punits, 300);
+fig_saver(save_folder, 'figS2 Afterimage_Matches_&_Control_Task', [20 10], saveformat_sup, punits, 300);
 
 %% Figure S3 | Hue Histograms for Experiment 1a.
 close all; clc;
