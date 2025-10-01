@@ -11,7 +11,7 @@
 clearvars; close all; clc;
 
 % FILES -------------------------------------------------------------------
-src_path = [pwd, '\'];
+src_path = pwd;
 functions_folder = fullfile(src_path, 'functions');
 addpath(functions_folder);
 load(fullfile(src_path, 'aggdata.mat'));
