@@ -1,6 +1,6 @@
 The-Non-Opponent-Nature-of-Colour-Afterimages
 
-This repository (https://github.com/christophWit/The-Non-Opponent-Nature-of-Colour-Afterimages) accompanies the article "The Non-Opponent Nature of Colour Afterimages" (Witzel, 2025, Communications Psychology). This repository focuses on data analyses in Matlab. Data is also available in Excel format in the linked zenodo repository: https://zenodo.org/uploads/13328099. There are three main scripts and 2 datasets. All functions required for the scripts are either embedded in subfunctions or saved in the subfolder functions. You should thus be able to run each of the 3 scripts without further ado. Details on the files:
+This repository (https://github.com/christophWit/The-Non-Opponent-Nature-of-Colour-Afterimages) accompanies the article "The Non-Opponent Nature of Colour Afterimages" (Witzel, 2025, Communications Psychology, https://doi.org/10.1038/s44271-025-00331-5). This repository focuses on data analyses in Matlab. Data is also available in Excel format in the linked zenodo repository: https://zenodo.org/uploads/13328099. There are three main scripts and 2 datasets. All functions required for the scripts are either embedded in subfunctions or saved in the subfolder functions. You should thus be able to run each of the 3 scripts without further ado. Details on the files:
 
 DATASETS: 
 
