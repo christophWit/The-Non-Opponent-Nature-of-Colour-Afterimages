@@ -27,21 +27,7 @@ saveformat      = 'png';
 saveformat_sup  = 'png';
 return
 
-%% **************************** MAIN: Article *****************************
-
-%% GRAPHICAL ABSTRACT
-close all; clc;
-[~, fh] = mod_exp2_analysor(AGG2a, 'Graphical Abstract');
-
-% REFORMAT ----------------------------------------------------------------
-fh.Color = 'k';
-fh.InvertHardcopy = 'off';
-wd = .5; ht = 1; y = 0;
-ax = get(fh, 'Children');
-set(ax, 'Position', [.25 0 wd, ht]);
-
-% SAVE --------------------------------------------------------------------
-fig_saver(save_folder, 'graphicalabstract', [16 8], saveformat, punits, 300);
+%% **************************** MAIN FIGURES ******************************
 
 %% Figure 1 | Afterimage Stimuli & Models. 
 close all; clc;
@@ -71,15 +57,6 @@ panel_identifier(1,5, [.12 .05], .05, fsz2, 'rows', axs, '.)');
 
 % SAVE --------------------------------------------------------------------
 fig_saver(save_folder, 'fig1_models', [30 7], saveformat, punits, 300);
-
-%% Table 1 | Differences from Opponency in Experiments 1a.
-
-% PRODUCE -----------------------------------------------------------------
-RES1 = mod_exp1_analysor(AGG1a, AGG1b, 'None');
-Table1 = RES1.ttab_exp1a;
-
-% SAVE --------------------------------------------------------------------
-writetable(Table1, tab_file, 'Sheet', 'Table1', 'WriteRowNames',true);
 
 %% Figure 2 | Experiment 1-2.
 close all; clc;
@@ -124,9 +101,52 @@ panel_identifier(1,2, [.07 .16], .05, fsz2, 'rows', axs, '.)', 9);
 
 fig_saver(save_folder, 'fig2i-l_afteri', [27 5], saveformat, punits, 300);
 
-%% METHOD
-METH2a = mod_exp2_analysor(AGG2a, 'Method');
-METH2b = mod_exp2_analysor(AGG2b, 'Method');
+%% Figure 3 | Change of Afterimage Hue with Chroma (Experiment 3).
+close all; clc;
+
+% PRODUCE -----------------------------------------------------------------
+RES3 = mod_exp3_analysor(AGG3, 'MAIN');
+
+% REFORMAT ----------------------------------------------------------------
+[fh, axs] = subplot_recombiner(ones(6,1), 3, 2, 1:6);
+
+xlabel(axs(2), 'Green-Red [u*]');
+ylabel(axs(2), 'Blue-Yellow [v*]');
+xlabel(axs(3), 'Green-Red [u*]');
+ylabel(axs(3), 'Blue-Yellow [v*]');
+ylabel(axs(6), []);
+
+axis(axs(3), [-200 200 -300 100]);
+axis(axs(4), [-1 1 -1 1]*100);
+axis(axs(5), [-1 1 -1 1]*50);
+axis(axs(6), [-1 1 -1 1]*25);
+
+set(axs(5), 'XTick', -50:25:50, 'YTick', -50:25:50);
+set(axs(6), 'XTick', -25:25:25, 'YTick', -25:25:25);
+
+wd = .35; ht = .27; y = [.7 .37 .04]; x = [.11 .62];
+set(axs(1), 'Position', [.14 .69 wd, ht]);
+set(axs(2), 'Position', [x(2) y(1) wd, ht]);
+set(axs(3), 'Position', [x(1) y(2) wd, ht]);
+set(axs(4), 'Position', [x(2) y(2) wd, ht]);
+set(axs(5), 'Position', [x(1) y(3) wd, ht]);
+set(axs(6), 'Position', [x(2) y(3) wd, ht]);
+
+panel_identifier(3,2, .18, .08, fsz2, 'rows', axs(2:6), '.)', 2);
+
+% SAVE --------------------------------------------------------------------
+fig_saver(save_folder, 'fig3 Saturation', [10 16], saveformat, punits, 300);
+
+%% **************************** MAIN TABLES *******************************
+
+%% Table 1 | Differences from Opponency in Experiments 1a.
+
+% PRODUCE -----------------------------------------------------------------
+RES1 = mod_exp1_analysor(AGG1a, AGG1b, 'None');
+Table1 = RES1.ttab_exp1a;
+
+% SAVE --------------------------------------------------------------------
+writetable(Table1, tab_file, 'Sheet', 'Table1', 'WriteRowNames',true);
 
 %% TABLE 2: Correlations in Experiment 2
 
@@ -173,42 +193,6 @@ writetable(Table3.d, tab_file, 'Sheet', 'Table3d', 'WriteRowNames',true);
 writetable(Table3.e, tab_file, 'Sheet', 'Table3e', 'WriteRowNames',true);
 writetable(Table3.f, tab_file, 'Sheet', 'Table3f', 'WriteRowNames',true);
 
-%% Figure 3 | Change of Afterimage Hue with Chroma (Experiment 3).
-close all; clc;
-
-% PRODUCE -----------------------------------------------------------------
-RES3 = mod_exp3_analysor(AGG3, 'MAIN');
-
-% REFORMAT ----------------------------------------------------------------
-[fh, axs] = subplot_recombiner(ones(6,1), 3, 2, 1:6);
-
-xlabel(axs(2), 'Green-Red [u*]');
-ylabel(axs(2), 'Blue-Yellow [v*]');
-xlabel(axs(3), 'Green-Red [u*]');
-ylabel(axs(3), 'Blue-Yellow [v*]');
-ylabel(axs(6), []);
-
-axis(axs(3), [-200 200 -300 100]);
-axis(axs(4), [-1 1 -1 1]*100);
-axis(axs(5), [-1 1 -1 1]*50);
-axis(axs(6), [-1 1 -1 1]*25);
-
-set(axs(5), 'XTick', -50:25:50, 'YTick', -50:25:50);
-set(axs(6), 'XTick', -25:25:25, 'YTick', -25:25:25);
-
-wd = .35; ht = .27; y = [.7 .37 .04]; x = [.11 .62];
-set(axs(1), 'Position', [.14 .69 wd, ht]);
-set(axs(2), 'Position', [x(2) y(1) wd, ht]);
-set(axs(3), 'Position', [x(1) y(2) wd, ht]);
-set(axs(4), 'Position', [x(2) y(2) wd, ht]);
-set(axs(5), 'Position', [x(1) y(3) wd, ht]);
-set(axs(6), 'Position', [x(2) y(3) wd, ht]);
-
-panel_identifier(3,2, .18, .08, fsz2, 'rows', axs(2:6), '.)', 2);
-
-% SAVE --------------------------------------------------------------------
-fig_saver(save_folder, 'fig3 Saturation', [10 16], saveformat, punits, 300);
-
 %% Table 4 | Correlations of Experiments 3.
 
 % PRODUCE -----------------------------------------------------------------
@@ -222,6 +206,24 @@ writetable(Table4.a, tab_file, 'Sheet', 'Table4a', 'WriteRowNames',true);
 writetable(Table4.b, tab_file, 'Sheet', 'Table4b', 'WriteRowNames',true);
 
 %% ************************ SUPPLEMENTARY MATERIAL ************************
+
+%% GRAPHICAL ABSTRACT
+close all; clc;
+[~, fh] = mod_exp2_analysor(AGG2a, 'Graphical Abstract');
+
+% REFORMAT ----------------------------------------------------------------
+fh.Color = 'k';
+fh.InvertHardcopy = 'off';
+wd = 1; ht = 1; y = 0;
+ax = get(fh, 'Children');
+set(ax, 'Position', [0 0 wd, ht]);
+
+% SAVE --------------------------------------------------------------------
+fig_saver(save_folder, 'figS0_graphicalabstract', [10 10], saveformat_sup, punits, 300);
+
+%% DETAILS ON METHOD IN EXP2
+METH2a = mod_exp2_analysor(AGG2a, 'Method');
+METH2b = mod_exp2_analysor(AGG2b, 'Method');
 
 %% ANIMATIONS & FIGURE S1
 close all; clc;
@@ -344,6 +346,7 @@ ylabel(axs(2:6), []);
 ylabel(axs(8:12), []);
 set(axs(2:6),  'YTickLabel', []);
 set(axs(8:12), 'YTickLabel', []);
+xlabel(axs(7), 'Hue bins [5 deg]');
 
 panel_identifier(2,6, [.22 .04], .04, fsz2, 'rows', axs,  '.)');
 
@@ -357,7 +360,7 @@ RES = mod_exp2_analysor(AGG2a, 'Distribution Chroma');
 % FORMATTING --------------------------------------------------------------
 axs = get(gcf,'Children');
 axs = flipud(axs);
-wd = .13; ht = .38; y = [.57 .08]; x = [.05 .21 .37 .53 .69 .85];
+wd = .13; ht = .38; y = [.57 .09]; x = [.05 .21 .37 .53 .69 .85];
 
 set(axs(1),  'Position', [x(1) y(1) wd, ht]);
 set(axs(2),  'Position', [x(2) y(1) wd, ht]);
@@ -377,6 +380,8 @@ ylabel(axs(2:6), []);
 ylabel(axs(8:12), []);
 set(axs(2:6),  'YTickLabel', []);
 set(axs(8:12), 'YTickLabel', []);
+xlabel(axs(7), 'Chroma bins [5 units]');
+set(axs(7:12), 'XTickLabelRotation', 40);
 
 panel_identifier(2,6, [.22 .04], .04, fsz2, 'rows', axs,  '.)');
 
